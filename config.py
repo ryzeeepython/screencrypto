@@ -1,0 +1,5 @@
+TOKEN = '5801105925:AAG-0nJE1d0if8CkKDnaMnt5QXf-DFLmgQg'
+
+members = ['631694976', '6065689244'] 
+
+admins = ['631694976', '6065689244'] 
