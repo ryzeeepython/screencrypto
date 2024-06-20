@@ -182,7 +182,6 @@ class DrawScreen_Bingx:
             a = float(entry)
             percent = (((b/a-1) * 100) * int(leverage) /100) 
             res = int(position) * percent * -1
-        
 
         if res_type == 'В USDT(PNL)':
             res  = str(res)
@@ -759,10 +758,6 @@ class DrawScreen_Bingx:
         image = image.convert('RGB')
 
         image.save(f'main/images/{chat_id}_img.jpg')
-
-
-
-
 
 
     
