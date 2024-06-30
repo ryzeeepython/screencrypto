@@ -73,7 +73,10 @@ class DrawScreen2:
 
 
         #подсчет ликвидации 
-        liquidation = (float(entry)*int(leverage)) / (int(leverage) + 1 - (int(leverage) / 100))
+        if type == 'long':
+            liquidation = (float(entry)*int(leverage)) / (int(leverage) + 1 - (int(leverage) / 100))
+        else: 
+            liquidation = (float(entry)*int(leverage)) / (int(leverage) - 1 + (int(leverage) / 100))
         
     
         if '.' in str(pnl):
@@ -84,17 +87,10 @@ class DrawScreen2:
             if len(str(position).split('.')[1]) > 2: 
                 position = round(float(position), 2)
         
-        if '.' in str(entry):
-            if len(str(entry).split('.')[1]) > 2: 
-                entry = round(float(entry), 2)
 
         if '.' in str(liquidation):
-            if len(str(liquidation).split('.')[1]) > 2: 
-                liquidation = round(float(liquidation), 2)
-
-        if '.' in str(take):
-            if len(str(take).split('.')[1]) > 2: 
-                take = round(float(take), 2)
+            if len(str(liquidation).split('.')[1]) > 6: 
+                liquidation = round(float(liquidation), 6)
 
 
         if type == 'long': 
