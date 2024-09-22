@@ -124,31 +124,19 @@ async def main(message: types.Message, state: FSMContext):
         await message.answer(f'Ошибка, цена должна состоять только из цифр')
         await message.answer(f'Повторить попытку: /make_screen', reply_markup=markup)
     else:
-        await state.update_data(current_price =answer)
-        await message.answer('Как отобразить прибыль: ', reply_markup=inline_kb1)
-        await make_screen_states.next()
-
-@dp.callback_query_handler(state = make_screen_states.Q8)
-async def some_callback_handler(callback_query: types.CallbackQuery,state: FSMContext):
-
-    answer = callback_query.data
-    if answer == 'В процентах (ROI)' or answer == 'В USDT(PNL)': 
-        await state.update_data(res_type =answer)
+        await state.update_data(current_price = answer)
         data = await state.get_data()
         await state.finish()
-        await bot.send_message(chat_id=callback_query.from_user.id, text = 'Подождите чуток')
+        await bot.send_message(chat_id=message.from_user.id, text = 'Подождите чуток')
         if data["birga"] == "BingX":
-            DrawScreen_Bingx.drawscreen_bingx(data, callback_query.from_user.id)
+            DrawScreen_Bingx.drawscreen_test(data, message.from_user.id)
         else: 
-            DrawScreen.drawscreen(data, callback_query.from_user.id)
-        photo = InputFile(f"main/images/{callback_query.from_user.id}_img.jpg")
-        await bot.send_photo(callback_query.from_user.id, photo, reply_markup=markup)
-        DrawScreen.delete_screen(chat_id=callback_query.from_user.id)
-    else: 
-        await bot.send_message(chat_id=callback_query.from_user.id, text = 'Ошибка, ответ неверный')
-        await bot.send_message(chat_id=callback_query.from_user.id, text = f'Повторить попытку: /make_screen', reply_markup=markup)
+            DrawScreen.drawscreen(data, message.from_user.id)
+        photo = InputFile(f"main/images/{message.from_user.id}_img.jpg")
+        await bot.send_photo(message.from_user.id, photo, reply_markup=markup)
+        DrawScreen.delete_screen(chat_id=message.from_user.id)
 
-    
+
 
     
 
