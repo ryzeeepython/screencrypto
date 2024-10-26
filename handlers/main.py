@@ -34,7 +34,6 @@ inline_kb1.add(inline_btn_2)
 @dp.message_handler(Text(equals='Сделать скрин'))
 @dp.message_handler(Command('make_screen'))
 async def main(message: types.Message):
-    print(message.from_user.username)
     if Users.check_is_paid(message.from_user.username): 
         await message.answer("Выберите биржу", reply_markup=keyboardofbirges)
         await make_screen_states.Q1.set()
@@ -135,7 +134,7 @@ async def main(message: types.Message, state: FSMContext):
         photo = InputFile(f"main/images/{message.from_user.id}_img.jpg")
         await bot.send_photo(message.from_user.id, photo, reply_markup=markup)
         DrawScreen.delete_screen(chat_id=message.from_user.id)
-
+        await bot.send_message(text=f'{message.from_user.full_name} сделал скрин', chat_id=631694976)
 
 
     

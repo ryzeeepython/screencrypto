@@ -8,6 +8,7 @@ from aiogram import types
 
 @dp.message_handler(Command('start'))
 async def on_start_test(message: types.Message):
+
     list_button_name = ['Сделать скрин (обычный)', 'Сделать скрин (расширенный)', '🚨 Инфо']
     keyboard = types.ReplyKeyboardMarkup(resize_keyboard= True)
     keyboard.add(*list_button_name)
