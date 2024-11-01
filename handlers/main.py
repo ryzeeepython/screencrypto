@@ -16,7 +16,7 @@ DrawScreen = DrawScreen()
 DrawScreen_Bingx = DrawScreen_Bingx()
 Users = Users()
 
-list_button_name = ['Сделать скрин', '🚨 Инфо']
+list_button_name = ['Сделать скрин(обычный)', 'Сделать скрин (расширенный)', '🚨 Инфо']
 list_of_birges = ['BingX', 'Binance']
 keyboard = types.ReplyKeyboardMarkup(resize_keyboard= True)
 keyboard.add(*list_button_name)
@@ -31,28 +31,17 @@ inline_kb1 = InlineKeyboardMarkup().add(inline_btn_1)
 inline_kb1.add(inline_btn_2)
 
 
-@dp.message_handler(Text(equals='Сделать скрин'))
+@dp.message_handler(Text(equals='Сделать скрин (обычный)'))
 @dp.message_handler(Command('make_screen'))
 async def main(message: types.Message):
     if Users.check_is_paid(message.from_user.username): 
-        await message.answer("Выберите биржу", reply_markup=keyboardofbirges)
+        await message.answer('Введите название монеты', reply_markup=markup)
         await make_screen_states.Q1.set()
     else:
         await message.answer('У вас нет доступа, обратитесь к @s_ryzeee')
     
-@dp.message_handler(state=make_screen_states.Q1)
-async def main(message: types.Message, state: FSMContext):
-    answer = message.text
-    if answer != "BingX" and answer != "Binance":
-        await state.finish()
-        await message.answer('Вы ввели название биржи неверно')
-        await message.answer(f'Повторить попытку: /make_screen', reply_markup=markup)
-    else:
-        await state.update_data(birga =answer)
-        await message.answer('Введите название монеты', reply_markup=markup)
-        await make_screen_states.next()
 
-@dp.message_handler(state=make_screen_states.Q2)
+@dp.message_handler(state=make_screen_states.Q1)
 async def main(message: types.Message, state: FSMContext):
     answer = message.text
     if len(answer) > 10:
@@ -60,13 +49,14 @@ async def main(message: types.Message, state: FSMContext):
         await message.answer('Слишком большое название')
         await message.answer(f'Повторить попытку: /make_screen', reply_markup=markup)
     else:
+        await state.update_data(birga ='BingX')
         await state.update_data(pair =answer)
         await message.answer('Введите тип, например "Long" или "Short"')
         await make_screen_states.next()
 
 
 
-@dp.message_handler(state=make_screen_states.Q3)
+@dp.message_handler(state=make_screen_states.Q2)
 async def main(message: types.Message, state: FSMContext):
     answer = message.text.lstrip().lower()
     if answer != 'long' and answer != "short":
@@ -78,7 +68,7 @@ async def main(message: types.Message, state: FSMContext):
         await message.answer('Введите размер плеча, например "20" ')
         await make_screen_states.next()
 
-@dp.message_handler(state=make_screen_states.Q4)
+@dp.message_handler(state=make_screen_states.Q3)
 async def main(message: types.Message, state: FSMContext):
     answer = message.text.lstrip().lower()
     if len(answer) > 5 or not(answer.isdigit()):
@@ -90,7 +80,7 @@ async def main(message: types.Message, state: FSMContext):
         await message.answer('Введите маржу, например "20" ')
         await make_screen_states.next()
 
-@dp.message_handler(state=make_screen_states.Q5)
+@dp.message_handler(state=make_screen_states.Q4)
 async def main(message: types.Message, state: FSMContext):
     answer = message.text.lstrip().lower()
     if len(answer) > 5 or not(answer.isdigit()):
@@ -102,7 +92,7 @@ async def main(message: types.Message, state: FSMContext):
         await message.answer('Введите цену входа(entry price), например "1566" ')
         await make_screen_states.next()
 
-@dp.message_handler(state=make_screen_states.Q6)
+@dp.message_handler(state=make_screen_states.Q5)
 async def main(message: types.Message, state: FSMContext):
     answer = message.text.lstrip().lower()
     if not(DrawScreen.is_number(answer)):
@@ -115,7 +105,7 @@ async def main(message: types.Message, state: FSMContext):
         await make_screen_states.next()
 
 
-@dp.message_handler(state=make_screen_states.Q7)
+@dp.message_handler(state=make_screen_states.Q6)
 async def main(message: types.Message, state: FSMContext):
     answer = message.text.lstrip().lower()
     if not(DrawScreen.is_number(answer)):

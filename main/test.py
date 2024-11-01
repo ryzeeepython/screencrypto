@@ -10,14 +10,65 @@ class DrawScreen:
         self.red_color = (221,77,108,255)
         self.orange_color = (212,174,9,255)
 
+    def add_comm(self, n):
+        if len(str(n)) >= 4:
+            if '.' in str(n): 
+                n2 = str(n).split('.')
+                k = n2[1]
+                if len((n2)[0]) == 4: 
+                    n2 = str(n2[0][0]) + ',' + str(n2[0][1:])
+                elif len((n2)[0]) == 5: 
+                    n2 = str(n2[0][:2]) + ',' + str(n2[0][2:])
+                elif len((n2)[0]) == 6: 
+                    n2 = str(n2[0][:3]) + ',' + str(n2[0][3:])
+                elif len((n2)[0]) == 7: 
+                    n2 = str(n2[0][0]) + ',' + str(n2[0][1:4]) + ',' + str(n2[0][4:])
+                else: 
+                    return n
+                n2 = n2+ '.' + k
+
+            else:
+                n2 = str(n).split('.')
+                if len((n2)[0]) == 4: 
+                    n2 = str(n2[0][0]) + ',' + str(n2[0][1:])
+                elif len((n2)[0]) == 5: 
+                    n2 = str(n2[0][:2]) + ',' + str(n2[0][2:])
+                elif len((n2)[0]) == 6: 
+                    n2 = str(n2[0][:3]) + ',' + str(n2[0][3:])
+                elif len((n2)[0]) == 7: 
+                    n2 = str(n2[0][0]) + ',' + str(n2[0][1:4]) + ',' + str(n2[0][4:])
+                else: 
+                    return n
+        else: 
+            return n 
+        return n2
+    
+    def shorten_res(self, n):
+        n2 = str(n).replace('-', '')
+        if '.' in n2: 
+            n2 = n2.split('.')
+            if len(n2[1]) >= 2 and len(n2[0]) < 5:
+                n2 = round(float(str(n).replace('-', '')), 2)
+            elif len(n2[1]) >= 2 and len(n2[0]) < 6:
+                n2 = round(float(str(n).replace('-', '')), 1)
+            else: 
+                n2 = n2[0][:6]
+        else: 
+            if len(n2) > 6:  
+                n2 = n2[:6]
+        
+        if str(n)[0] == '-': 
+            n2 = '-' + str(n2)
+
+        return n2
 
     def drawscreen_test(self):
 
-        res = 12.54
+        res = 5343.121212
         type = "short"
         entry = "123"
-        take = "58.069"
-        coin_name = "BTCUSDT"
+        take = "65122"
+        coin_name = "BTCUSDTGH"
         leverage = "3"
 
         coin_font = ImageFont.truetype("main/fonts/OkomitoBold.ttf",140)
@@ -26,7 +77,7 @@ class DrawScreen:
         type_font  = ImageFont.truetype("main/fonts/Klein-Bold.otf",130)
         type_font1  = ImageFont.truetype("main/fonts/Klein-Bold.otf",125)
         leverage_font  = ImageFont.truetype("main/fonts/BBCasualProBold.ttf",120)
-        phont_2  = ImageFont.truetype("main/fonts/NeulisAltSemiBold.ttf",110)
+        phont_2  = ImageFont.truetype("main/fonts/Inter700.ttf",95)
         usdt_font_1 = ImageFont.truetype("main/fonts/ConfigRoundedText.ttf",360)
         plus_phont_1  = ImageFont.truetype("main/fonts/Clonoid.ttf",350)
         res_font_1  = ImageFont.truetype("main/fonts/QanelasMedium.ttf",350)
@@ -48,17 +99,7 @@ class DrawScreen:
             image = Image.open("main/images/green_bg.png")
             drawer = ImageDraw.Draw(image)
 
-            res = str(res)
-            if len(str(res).replace('-','')) > 7:
-                if '.' in res: 
-                    split_s = res.split('.')
-                    if len(split_s[0]) > 6: 
-                        res = split_s[0][:6]
-                    else: 
-                        res = round(float(res), 6 - len(split_s[0]))
-                        if res.is_integer(): 
-                            res = int(res)
-
+            res = self.shorten_res(res)
 
           
             if len(coin_name) == 4:
@@ -90,31 +131,31 @@ class DrawScreen:
 
             if len(str(res).replace('-', '')) == 3:
                 if '.' in str(res):
-                    drawer.text((200, 1200), '+', font=plus_phont_1, fill=self.green_color)
-                    drawer.text((570, 1200), (str(res)), font=res_font_1, fill=self.green_color)
-                    drawer.text((1070, 1260), 'USDT', font=usdt_font_1, fill=self.green_color)
+                    drawer.text((200, 1230), '+', font=plus_phont_1, fill=self.green_color)
+                    drawer.text((570, 1230), (str(res)), font=res_font_1, fill=self.green_color)
+                    drawer.text((1070, 1290), 'USDT', font=usdt_font_1, fill=self.green_color)
                 else:
-                    drawer.text((200, 1200), '+', font=plus_phont_1, fill=self.green_color)
-                    drawer.text((570, 1200), (str(res)), font=res_font_1, fill=self.green_color)
-                    drawer.text((1140, 1260), 'USDT', font=usdt_font_1, fill=self.green_color)
+                    drawer.text((200, 1230), '+', font=plus_phont_1, fill=self.green_color)
+                    drawer.text((570, 1230), (str(res)), font=res_font_1, fill=self.green_color)
+                    drawer.text((1140, 1290), 'USDT', font=usdt_font_1, fill=self.green_color)
 
             if len(str(res).replace('-', '')) == 4:
                 if '.' in str(res):
-                    drawer.text((200, 1200), '+', font=plus_phont_2, fill=self.green_color)
-                    drawer.text((520, 1200), (str(res)), font=res_font_2, fill=self.green_color)
-                    drawer.text((1130, 1260), 'USDT', font=usdt_font_2, fill=self.green_color)
+                    drawer.text((200, 1230), '+', font=plus_phont_2, fill=self.green_color)
+                    drawer.text((520, 1230), (str(res)), font=res_font_2, fill=self.green_color)
+                    drawer.text((1130, 1290), 'USDT', font=usdt_font_2, fill=self.green_color)
                 else:
-                    drawer.text((140, 1200), '+', font=plus_phont_2, fill=self.green_color)
-                    drawer.text((460, 1200), (str(res)), font=res_font_2, fill=self.green_color)
-                    drawer.text((1160, 1260), 'USDT', font=usdt_font_2, fill=self.green_color)
+                    drawer.text((140, 1230), '+', font=plus_phont_2, fill=self.green_color)
+                    drawer.text((460, 1230), (str(res)), font=res_font_2, fill=self.green_color)
+                    drawer.text((1160, 1290), 'USDT', font=usdt_font_2, fill=self.green_color)
 
 
 
             if len(str(res).replace('-', '')) == 5:
                 if '.' in str(res):
-                    drawer.text((140, 1200), '+', font=plus_phont_3, fill=self.green_color)
-                    drawer.text((440, 1200), (str(res)), font=res_font_3, fill=self.green_color)
-                    drawer.text((1200, 1250), 'USDT', font=usdt_font_3, fill=self.green_color)
+                    drawer.text((140, 1230), '+', font=plus_phont_3, fill=self.green_color)
+                    drawer.text((440, 1230), (str(res)), font=res_font_3, fill=self.green_color)
+                    drawer.text((1200, 1280), 'USDT', font=usdt_font_3, fill=self.green_color)
                 else:
                     drawer.text((110, 1200), '+', font=plus_phont_3, fill=self.green_color)
                     drawer.text((400, 1200), (str(res)), font=res_font_3, fill=self.green_color)
@@ -123,44 +164,35 @@ class DrawScreen:
             if len(str(res).replace('-', '')) == 6:
 
                 if '.' in str(res):
-                    drawer.text((120, 1200), '+', font=plus_phont_4, fill=self.green_color)
-                    drawer.text((400, 1200), (str(res)), font=res_font_4, fill=self.green_color)
-                    drawer.text((1270, 1250), 'USDT', font=usdt_font_4, fill=self.green_color)
+                    drawer.text((120, 1230), '+', font=plus_phont_4, fill=self.green_color)
+                    drawer.text((400, 1230), (str(res)), font=res_font_4, fill=self.green_color)
+                    drawer.text((1270, 1280), 'USDT', font=usdt_font_4, fill=self.green_color)
                 else:
-                    drawer.text((110, 1200), '+', font=plus_phont_4, fill=self.green_color)
-                    drawer.text((400, 1200), (str(res)), font=res_font_4, fill=self.green_color)
-                    drawer.text((1380, 1250), 'USDT', font=usdt_font_4, fill=self.green_color)
+                    drawer.text((110, 1230), '+', font=plus_phont_4, fill=self.green_color)
+                    drawer.text((400, 1230), (str(res)), font=res_font_4, fill=self.green_color)
+                    drawer.text((1380, 1280), 'USDT', font=usdt_font_4, fill=self.green_color)
 
             if len(str(res).replace('-', '')) == 7:
                 if '.' in str(res):
-                    drawer.text((160, 1200), '+', font=plus_phont_5, fill=self.green_color)
-                    drawer.text((420, 1200), (str(res)), font=res_font_5, fill=self.green_color)
-                    drawer.text((1320, 1240), 'USDT', font=usdt_font_5, fill=self.green_color)
+                    drawer.text((160, 1230), '+', font=plus_phont_5, fill=self.green_color)
+                    drawer.text((420, 1230), (str(res)), font=res_font_5, fill=self.green_color)
+                    drawer.text((1320, 1270), 'USDT', font=usdt_font_5, fill=self.green_color)
                 else:
-                    drawer.text((160, 1200), '+', font=plus_phont_5, fill=self.green_color)
-                    drawer.text((420, 1200), (str(res)), font=res_font_5, fill=self.green_color)
-                    drawer.text((1380, 1240), 'USDT', font=usdt_font_5, fill=self.green_color)
+                    drawer.text((160, 1230), '+', font=plus_phont_5, fill=self.green_color)
+                    drawer.text((420, 1230), (str(res)), font=res_font_5, fill=self.green_color)
+                    drawer.text((1380, 1270), 'USDT', font=usdt_font_5, fill=self.green_color)
             
+            take = self.add_comm(take)
+            entry = self.add_comm(entry)
 
-            drawer.text((990, 1775), str(take), font=phont_2, fill="white")
-            drawer.text((1200, 1960), str(entry), font=phont_2, fill="white")
+            drawer.text((990, 1770), str(take), font=phont_2, fill="white")
+            drawer.text((1200, 1955), str(entry), font=phont_2, fill="white")
 
         else: 
             image = Image.open("main/images/red_bg.png")
             drawer = ImageDraw.Draw(image)
 
-            res = str(res)
-            if len(str(res).replace('-','')) > 7:
-                if '.' in res: 
-                    split_s = res.split('.')
-                    if len(split_s[0]) > 6: 
-                        res = split_s[0][:6]
-                    else: 
-                        res = round(float(res), 6 - len(split_s[0]))
-                        if res.is_integer(): 
-                            res = int(res)
-
-
+            res = self.shorten_res(res)
           
             if len(coin_name) == 4:
                 drawer.text((350-60, 980), coin_name, font=coin_font, fill='white')
@@ -190,48 +222,50 @@ class DrawScreen:
 
             if len(str(res).replace('-', '')) == 3:
                 if '.' in str(res):
-                    drawer.text((250, 1200), (str(res)), font=res_font_1, fill=self.red_color)
-                    drawer.text((1070-60, 1260), 'USDT', font=usdt_font_1, fill=self.red_color)
+                    drawer.text((250, 1210), (str(res)), font=res_font_1, fill=self.red_color)
+                    drawer.text((1070-60, 1270), 'USDT', font=usdt_font_1, fill=self.red_color)
                 else:
-                    drawer.text((160, 1200), (str(res)), font=res_font_1, fill=self.red_color)
-                    drawer.text((1070-60, 1260), 'USDT', font=usdt_font_1, fill=self.red_color)
+                    drawer.text((160, 1210), (str(res)), font=res_font_1, fill=self.red_color)
+                    drawer.text((1070-60, 1270), 'USDT', font=usdt_font_1, fill=self.red_color)
 
             if len(str(res).replace('-', '')) == 4:
                 if '.' in str(res):
-                    drawer.text((200, 1200), (str(res)), font=res_font_2, fill=self.red_color)
-                    drawer.text((1070-60, 1250), 'USDT', font=usdt_font_2, fill=self.red_color)
+                    drawer.text((200, 1220), (str(res)), font=res_font_2, fill=self.red_color)
+                    drawer.text((1070-60, 1270), 'USDT', font=usdt_font_2, fill=self.red_color)
                 else:
-                    drawer.text((200, 1200), (str(res)), font=res_font_2, fill=self.red_color)
-                    drawer.text((1160-60, 1250), 'USDT', font=usdt_font_2, fill=self.red_color)
+                    drawer.text((200, 1210), (str(res)), font=res_font_2, fill=self.red_color)
+                    drawer.text((1160-60, 1260), 'USDT', font=usdt_font_2, fill=self.red_color)
 
             if len(str(res).replace('-', '')) == 5:
                 if '.' in str(res):
-                    drawer.text((140, 1200), (str(res)), font=res_font_3, fill=self.red_color)
-                    drawer.text((1160-60, 1250), 'USDT', font=usdt_font_3, fill=self.red_color)
+                    drawer.text((140, 1210), (str(res)), font=res_font_3, fill=self.red_color)
+                    drawer.text((1160-60, 1260), 'USDT', font=usdt_font_3, fill=self.red_color)
                 else:
-                    drawer.text((180, 1200), (str(res)), font=res_font_3, fill=self.red_color)
-                    drawer.text((1230-60, 1250), 'USDT', font=usdt_font_3, fill=self.red_color)
+                    drawer.text((180, 1210), (str(res)), font=res_font_3, fill=self.red_color)
+                    drawer.text((1230-60, 1260), 'USDT', font=usdt_font_3, fill=self.red_color)
 
             if len(str(res).replace('-', '')) == 6:
 
                 if '.' in str(res):
-                    drawer.text((140, 1200), (str(res)), font=res_font_3, fill=self.red_color)
-                    drawer.text((1270-60, 1250), 'USDT', font=usdt_font_3, fill=self.red_color)
+                    drawer.text((140, 1210), (str(res)), font=res_font_3, fill=self.red_color)
+                    drawer.text((1270-60, 1260), 'USDT', font=usdt_font_3, fill=self.red_color)
                 else:
-                    drawer.text((150, 1200), (str(res)), font=res_font_4, fill=self.red_color)
-                    drawer.text((1330-60, 1250), 'USDT', font=usdt_font_4, fill=self.red_color)
+                    drawer.text((150, 1210), (str(res)), font=res_font_4, fill=self.red_color)
+                    drawer.text((1330-60, 1260), 'USDT', font=usdt_font_4, fill=self.red_color)
 
             if len(str(res).replace('-', '')) == 7:
                 if '.' in str(res):
-                    drawer.text((140, 1200), (str(res)), font=res_font_4, fill=self.red_color)
-                    drawer.text((1350-60, 1250), 'USDT', font=usdt_font_4, fill=self.red_color)
+                    drawer.text((140, 1210), (str(res)), font=res_font_4, fill=self.red_color)
+                    drawer.text((1350-60, 1260), 'USDT', font=usdt_font_4, fill=self.red_color)
                 else:
-                    drawer.text((150, 1200), (str(res)), font=res_font_5, fill=self.red_color)
-                    drawer.text((1330-60, 1235), 'USDT', font=usdt_font_5, fill=self.red_color)
+                    drawer.text((150, 1210), (str(res)), font=res_font_5, fill=self.red_color)
+                    drawer.text((1330-60, 1245), 'USDT', font=usdt_font_5, fill=self.red_color)
             
-            
-            drawer.text((990, 1775), str(take), font=phont_2, fill="white")
-            drawer.text((1200, 1960), str(entry), font=phont_2, fill="white")
+            take = self.add_comm(take)
+            entry = self.add_comm(entry)
+
+            drawer.text((990, 1765), str(take), font=phont_2, fill="white")
+            drawer.text((1200, 1950), str(entry), font=phont_2, fill="white")
 
         image = image.convert('RGB')
 
