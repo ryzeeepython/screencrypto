@@ -256,7 +256,7 @@ class DrawScreen_Bingx:
             res = int(position) * percent * -1
 
          
-        res = self.shorten_res(res)
+        res = float(self.shorten_res(res))
 
         if res > 0: 
             image = Image.open("main/images/green_bg.png")
